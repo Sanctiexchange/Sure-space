@@ -16,7 +16,10 @@ function App() {
       <Route path="/products" element={<MainLayout><Products /></MainLayout>} />  
       <Route path="/product-details" element={<MainLayout><ProductDetails /></MainLayout>} />
       <Route path="/checkout" element={<MainLayout><Checkout /></MainLayout>} />
-      <Route path="/OrderConfirmation" element={<MainLayout><OrderConfirmation /></MainLayout>} />
+      <Route
+          path="/order-confirmation"
+          element={<OrderConfirmation />}
+      />
       <Route path="/footer" element={<MainLayout><Footer /></MainLayout >} />
     </Routes>
   )
