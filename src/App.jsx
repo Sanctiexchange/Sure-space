@@ -11,13 +11,13 @@ import ProductDetails from "./pages/ProductDetails"
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/products" element={<Products />} />
-      <Route path="/product-details" element={<ProductDetails />} />
-      <Route path="/checkout" element={<Checkout />} />
-      <Route path="/OrderConfirmation" element={<OrderConfirmation />} />
-      <Route path="/footer" element={<Footer />} />
+      <Route path="/" element={<MainLayout><Home /></MainLayout>} />
+      <Route path="/cart" element={<MainLayout><Cart /></MainLayout>} />
+      <Route path="/products" element={<MainLayout><Products /></MainLayout>} />  
+      <Route path="/product-details" element={<MainLayout><ProductDetails /></MainLayout>} />
+      <Route path="/checkout" element={<MainLayout><Checkout /></MainLayout>} />
+      <Route path="/OrderConfirmation" element={<MainLayout><OrderConfirmation /></MainLayout>} />
+      <Route path="/footer" element={<MainLayout><Footer /></MainLayout >} />
     </Routes>
   )
 };
