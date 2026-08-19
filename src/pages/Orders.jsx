@@ -88,7 +88,12 @@ function Orders() {
                     <p className="text-xl font-bold text-gray-900">
                       ₦{order.total.toLocaleString()}
                     </p>
-
+                    <Link
+                        to={`/order-details/${order.orderNumber}`}
+                        className="mt-3 inline-block text-sm font-semibold text-green-600 hover:text-green-700"
+                    >
+                            View Order →
+                    </Link>
                   </div>
 
                 </div>
