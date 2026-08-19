@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/useCart";
+import { useOrders } from "../context/OrderContext";
 
 function Checkout() {
   const navigate = useNavigate();
@@ -12,7 +13,8 @@ function Checkout() {
     removeFromCart,
   } = useCart();
 
-  // Customer information
+  const { addOrder } = useOrders();
+
   const [customer, setCustomer] = useState({
     fullName: "",
     phone: "",
@@ -21,20 +23,16 @@ function Checkout() {
     city: "",
   });
 
-  // Delivery fee
   const deliveryFee = 5000;
 
-  // Calculate subtotal
   const subtotal = cartItems.reduce(
     (total, item) =>
-      total + Number(item.price) * item.quantity,
+      total + Number(item.price) * Number(item.quantity),
     0
   );
 
-  // Calculate final total
   const total = subtotal + deliveryFee;
 
-  // Handle input changes
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -44,16 +42,14 @@ function Checkout() {
     }));
   };
 
-  // Place order
   const handlePlaceOrder = (event) => {
     event.preventDefault();
 
-    // Make sure the cart is not empty
     if (cartItems.length === 0) {
+      alert("Your cart is empty.");
       return;
     }
 
-    // Make sure required information is provided
     if (
       !customer.fullName ||
       !customer.phone ||
@@ -64,27 +60,40 @@ function Checkout() {
       return;
     }
 
-    // Create a simple order number
     const orderNumber = `NM-${Date.now()
       .toString()
       .slice(-8)}`;
 
-    // Send order information to Order Confirmation
+    const order = {
+      orderNumber,
+      customer: {
+        ...customer,
+      },
+      items: cartItems.map((item) => ({
+        ...item,
+        price: Number(item.price),
+        quantity: Number(item.quantity),
+      })),
+      subtotal,
+      deliveryFee,
+      total,
+      status: "Order Received",
+      createdAt: new Date().toISOString(),
+    };
+
+    console.log("ORDER CREATED:", order);
+
+    addOrder(order);
+
+    console.log("ORDER SAVED TO ORDER CONTEXT");
+
     navigate("/order-confirmation", {
       state: {
-        order: {
-          orderNumber,
-          customer,
-          items: cartItems,
-          subtotal,
-          deliveryFee,
-          total,
-        },
+        order,
       },
     });
   };
 
-  // Empty cart
   if (cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 px-4 py-12">
@@ -94,8 +103,8 @@ function Checkout() {
           </h1>
 
           <p className="mt-3 text-gray-600">
-            You need to add products to your cart before
-            proceeding to checkout.
+            Add products to your cart before proceeding
+            to checkout.
           </p>
 
           <Link
@@ -113,7 +122,7 @@ function Checkout() {
     <div className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="mx-auto max-w-7xl">
 
-        {/* Page heading */}
+        {/* HEADER */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
             Checkout
@@ -131,7 +140,7 @@ function Checkout() {
             {/* LEFT SIDE */}
             <div className="space-y-6 lg:col-span-2">
 
-              {/* Delivery Information */}
+              {/* DELIVERY INFORMATION */}
               <div className="rounded-2xl bg-white p-6 shadow-sm">
                 <h2 className="text-xl font-bold text-gray-900">
                   Delivery Information
@@ -139,7 +148,7 @@ function Checkout() {
 
                 <div className="mt-6 grid gap-5 md:grid-cols-2">
 
-                  {/* Full Name */}
+                  {/* NAME */}
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
                       Full Name
@@ -156,7 +165,7 @@ function Checkout() {
                     />
                   </div>
 
-                  {/* Phone */}
+                  {/* PHONE */}
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
                       Phone Number
@@ -173,7 +182,7 @@ function Checkout() {
                     />
                   </div>
 
-                  {/* Email */}
+                  {/* EMAIL */}
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
                       Email Address
@@ -189,7 +198,7 @@ function Checkout() {
                     />
                   </div>
 
-                  {/* City */}
+                  {/* CITY */}
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
                       City
@@ -206,7 +215,7 @@ function Checkout() {
                     />
                   </div>
 
-                  {/* Address */}
+                  {/* ADDRESS */}
                   <div className="md:col-span-2">
                     <label className="mb-2 block text-sm font-medium text-gray-700">
                       Delivery Address
@@ -222,10 +231,11 @@ function Checkout() {
                       required
                     />
                   </div>
+
                 </div>
               </div>
 
-              {/* Products */}
+              {/* PRODUCTS */}
               <div className="rounded-2xl bg-white p-6 shadow-sm">
                 <h2 className="text-xl font-bold text-gray-900">
                   Your Products
@@ -239,7 +249,6 @@ function Checkout() {
                       className="flex flex-col gap-4 border-b border-gray-200 pb-5 last:border-b-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between"
                     >
 
-                      {/* Product information */}
                       <div>
                         <h3 className="font-semibold text-gray-900">
                           {item.name}
@@ -247,11 +256,12 @@ function Checkout() {
 
                         <p className="mt-1 text-green-600">
                           ₦
-                          {Number(item.price).toLocaleString()}
+                          {Number(
+                            item.price
+                          ).toLocaleString()}
                         </p>
                       </div>
 
-                      {/* Quantity controls */}
                       <div className="flex items-center gap-3">
 
                         <button
@@ -296,7 +306,7 @@ function Checkout() {
               </div>
             </div>
 
-            {/* RIGHT SIDE - ORDER SUMMARY */}
+            {/* RIGHT SIDE */}
             <div>
               <div className="sticky top-6 rounded-2xl bg-white p-6 shadow-sm">
 
@@ -306,33 +316,29 @@ function Checkout() {
 
                 <div className="mt-6 space-y-4">
 
-                  {/* Subtotal */}
-                  <div className="flex items-center justify-between">
+                  <div className="flex justify-between">
                     <span className="text-gray-600">
                       Subtotal
                     </span>
 
-                    <span className="font-medium text-gray-900">
+                    <span className="font-medium">
                       ₦{subtotal.toLocaleString()}
                     </span>
                   </div>
 
-                  {/* Delivery */}
-                  <div className="flex items-center justify-between">
+                  <div className="flex justify-between">
                     <span className="text-gray-600">
                       Delivery
                     </span>
 
-                    <span className="font-medium text-gray-900">
+                    <span className="font-medium">
                       ₦{deliveryFee.toLocaleString()}
                     </span>
                   </div>
 
                   <div className="border-t border-gray-200 pt-4">
-
-                    {/* Total */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-gray-900">
+                    <div className="flex justify-between">
+                      <span className="text-lg font-bold">
                         Total
                       </span>
 
@@ -340,11 +346,11 @@ function Checkout() {
                         ₦{total.toLocaleString()}
                       </span>
                     </div>
-
                   </div>
+
                 </div>
 
-                {/* Payment information */}
+                {/* PAYMENT NOTICE */}
                 <div className="mt-6 rounded-xl bg-gray-50 p-4">
                   <p className="text-sm font-semibold text-gray-800">
                     Payment Method
@@ -356,7 +362,7 @@ function Checkout() {
                   </p>
                 </div>
 
-                {/* Place Order */}
+                {/* PLACE ORDER */}
                 <button
                   type="submit"
                   className="mt-6 w-full rounded-lg bg-green-600 px-6 py-4 text-lg font-semibold text-white transition hover:bg-green-700"

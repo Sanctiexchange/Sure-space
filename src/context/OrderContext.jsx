@@ -1,32 +1,80 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 const OrderContext = createContext();
 
 export function OrderProvider({ children }) {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState(() => {
+    try {
+      const savedOrders = localStorage.getItem(
+        "naijaMarketOrders"
+      );
 
-  const createOrder = (orderData) => {
-    const order = {
-      ...orderData,
-      orderNumber: `NM-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      status: "pending",
-    };
+      if (!savedOrders) {
+        return [];
+      }
 
-    setOrders((currentOrders) => [
-      ...currentOrders,
-      order,
-    ]);
+      return JSON.parse(savedOrders);
+    } catch (error) {
+      console.error(
+        "Error loading orders:",
+        error
+      );
 
-    return order;
+      return [];
+    }
+  });
+
+  // Save orders to localStorage whenever orders change
+  useEffect(() => {
+    console.log(
+      "Orders changed:",
+      orders
+    );
+
+    localStorage.setItem(
+      "naijaMarketOrders",
+      JSON.stringify(orders)
+    );
+  }, [orders]);
+
+  // Add a new order
+  const addOrder = (order) => {
+    console.log(
+      "Adding order:",
+      order
+    );
+
+    setOrders((currentOrders) => {
+      const updatedOrders = [
+        ...currentOrders,
+        order,
+      ];
+
+      console.log(
+        "Updated orders:",
+        updatedOrders
+      );
+
+      return updatedOrders;
+    });
+  };
+
+  // Clear orders
+  const clearOrders = () => {
+    setOrders([]);
   };
 
   return (
     <OrderContext.Provider
       value={{
         orders,
-        createOrder,
+        addOrder,
+        clearOrders,
       }}
     >
       {children}

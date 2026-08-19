@@ -7,6 +7,7 @@ import Checkout from "./pages/Checkout"
 import OrderConfirmation from "./pages/OrderConfirmation"
 import Products from "./pages/products"
 import ProductDetails from "./pages/ProductDetails"
+import Orders from "./pages/Orders"
 
 function App() {
   return (
@@ -19,6 +20,10 @@ function App() {
       <Route
           path="/order-confirmation"
           element={<OrderConfirmation />}
+      />
+      <Route
+          path="/orders"
+          element={<Orders />}
       />
       <Route path="/footer" element={<MainLayout><Footer /></MainLayout >} />
     </Routes>
