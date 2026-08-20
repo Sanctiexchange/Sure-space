@@ -9,6 +9,7 @@ import Products from "./pages/products"
 import ProductDetails from "./pages/ProductDetails"
 import Orders from "./pages/Orders"
 import OrderDetails from "./pages/OrderDetail"
+import Register from "./pages/Register"
 
 function App() {
   return (
@@ -18,6 +19,10 @@ function App() {
       <Route path="/products" element={<MainLayout><Products /></MainLayout>} />  
       <Route path="/product-details" element={<MainLayout><ProductDetails /></MainLayout>} />
       <Route path="/checkout" element={<MainLayout><Checkout /></MainLayout>} />
+      <Route
+            path="/register"
+            element={<Register />}
+      />
       <Route
           path="/order-confirmation"
           element={<OrderConfirmation />}

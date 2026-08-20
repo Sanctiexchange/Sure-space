@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom"
 import App from './App.jsx'
 import { CartProvider } from './context/CartProvider.jsx'
 import { OrderProvider } from "./context/OrderContext";
+import { AuthProvider } from "./context/AuthContext.jsx";
 import './index.css'
 
 
@@ -13,7 +14,9 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
     <CartProvider>
     <OrderProvider>
+    <AuthProvider>
            <App />
+    </AuthProvider>
     </OrderProvider>
     </CartProvider>
     </BrowserRouter>

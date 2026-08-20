@@ -5,18 +5,25 @@ function Orders() {
   const { orders } = useOrders();
 
   return (
+
     <div className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="mx-auto max-w-6xl">
+
 
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
             My Orders
           </h1>
-
           <p className="mt-2 text-gray-600">
             View your previous orders and track their status.
           </p>
+          <Link
+                        to={`/`}
+                        className="mt-3 inline-block text-sm font-semibold text-green-600 hover:text-green-700"
+                    >
+                            Return Home →
+                    </Link>
         </div>
 
         {/* No Orders */}
