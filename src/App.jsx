@@ -10,6 +10,8 @@ import ProductDetails from "./pages/ProductDetails"
 import Orders from "./pages/Orders"
 import OrderDetails from "./pages/OrderDetail"
 import Register from "./pages/Register"
+import Account from "./pages/Account"
+import Login from "./pages/Login"
 
 function App() {
   return (
@@ -35,6 +37,11 @@ function App() {
           path="/order-details/:orderNumber"
           element={<OrderDetails />}
       />
+      <Route
+          path="/account"
+          element={<Account />}
+      />
+      <Route path="/login" element={<Login />} />
       <Route path="/footer" element={<MainLayout><Footer /></MainLayout >} />
     </Routes>
   )
