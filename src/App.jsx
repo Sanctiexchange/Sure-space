@@ -12,6 +12,7 @@ import OrderDetails from "./pages/OrderDetail"
 import Register from "./pages/Register"
 import Account from "./pages/Account"
 import Login from "./pages/Login"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 function App() {
   return (
@@ -40,6 +41,10 @@ function App() {
       <Route
           path="/account"
           element={<Account />}
+      />
+      <Route
+           path="/ProtectedRoute"
+           element={<ProtectedRoute />}
       />
       <Route path="/login" element={<Login />} />
       <Route path="/footer" element={<MainLayout><Footer /></MainLayout >} />
