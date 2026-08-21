@@ -10,9 +10,7 @@ const OrderContext = createContext();
 export function OrderProvider({ children }) {
   const [orders, setOrders] = useState(() => {
     try {
-      const savedOrders = localStorage.getItem(
-        "naijaMarketOrders"
-      );
+      const savedOrders = localStorage.getItem("naijaMarketOrders");
 
       if (!savedOrders) {
         return [];
@@ -20,22 +18,13 @@ export function OrderProvider({ children }) {
 
       return JSON.parse(savedOrders);
     } catch (error) {
-      console.error(
-        "Error loading orders:",
-        error
-      );
-
+      console.error("Error loading orders:", error);
       return [];
     }
   });
 
   // Save orders to localStorage whenever orders change
   useEffect(() => {
-    console.log(
-      "Orders changed:",
-      orders
-    );
-
     localStorage.setItem(
       "naijaMarketOrders",
       JSON.stringify(orders)
@@ -44,27 +33,12 @@ export function OrderProvider({ children }) {
 
   // Add a new order
   const addOrder = (order) => {
-    console.log(
-      "Adding order:",
-      order
-    );
-
     setOrders((currentOrders) => {
-      const updatedOrders = [
-        ...currentOrders,
-        order,
-      ];
-
-      console.log(
-        "Updated orders:",
-        updatedOrders
-      );
-
-      return updatedOrders;
+      return [...currentOrders, order];
     });
   };
 
-  // Clear orders
+  // Clear all orders
   const clearOrders = () => {
     setOrders([]);
   };

@@ -11,9 +11,10 @@ import {
 import { Link } from "react-router-dom";
 import { useState } from "react"
 import { useCart } from "../../context/useCart"
+import { useAuth } from "../../context/AuthContext";
 
 function Navbar() {
-
+  const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { cartItems } = useCart()
   const cartCount = cartItems.reduce(
@@ -68,6 +69,39 @@ function Navbar() {
           <div className="hidden lg:flex items-center gap-6">
 
             {/* Account */}
+            {user ? (
+  <>
+    <Link
+      to="/account"
+      className="font-medium text-gray-700 hover:text-green-600"
+    >
+      My Account
+    </Link>
+
+    <button
+      onClick={logout}
+      className="font-medium text-red-600 hover:text-red-700"
+    >
+      Logout
+    </button>
+  </>
+) : (
+  <>
+    <Link
+      to="/login"
+      className="font-medium text-gray-700 hover:text-green-600"
+    >
+      Login
+    </Link>
+
+    <Link
+      to="/register"
+      className="font-medium text-gray-700 hover:text-green-600"
+    >
+      Register
+    </Link>
+  </>
+)}
 
             <button className="flex items-center gap-2 text-gray-700 hover:text-green-600">
 
