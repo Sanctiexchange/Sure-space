@@ -105,6 +105,7 @@ function Account() {
 
 
         {/* Logout */}
+        <div className="text-center flex items-center justify-end gap-4">
         <button
           onClick={logout}
           className="mt-8 rounded-lg bg-red-600 px-6 py-3 font-semibold text-white hover:bg-red-700"
@@ -113,15 +114,15 @@ function Account() {
         </button>
 
           {/* home page*/}
-         <button>
+         
           <Link
            to={`/`}
            className="mt-8 rounded-lg bg-green-400 px-6 py-3 font-semibold text-white  hover:bg-blue-300"
            >
           Home
           </Link>
-        </button>
 
+      </div>
       </div>
     </div>
   );

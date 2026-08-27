@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CartContext } from "./CartContext";
+import toast from "react-hot-toast";
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
@@ -13,6 +14,8 @@ export function CartProvider({ children }) {
 
       // Product already exists
       if (existingItem) {
+      toast.success(`${product.name} quantity increased`);
+
         return currentItems.map((item) =>
           item.id === product.id
             ? {
@@ -22,6 +25,8 @@ export function CartProvider({ children }) {
             : item
         );
       }
+
+      toast.success(`${product.name} added to cart`);
 
       // Product does not exist
       return [
@@ -36,6 +41,7 @@ export function CartProvider({ children }) {
 
   // Increase product quantity
   const increaseQuantity = (productId) => {
+    
     setCartItems((currentItems) =>
       currentItems.map((item) =>
         item.id === productId
@@ -46,6 +52,7 @@ export function CartProvider({ children }) {
           : item
       )
     );
+              toast.success("quantity increased");
   };
 
   // Decrease product quantity
@@ -60,6 +67,7 @@ export function CartProvider({ children }) {
           : item
       )
     );
+                  toast.success("quantity decreased");
   };
 
   // Remove a product from the cart
