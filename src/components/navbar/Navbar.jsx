@@ -16,6 +16,19 @@ import { useAuth } from "../../context/AuthContext";
 function Navbar() {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
+  const handleSearch = (e) => {
+  e.preventDefault();
+
+  const search = searchTerm.trim();
+
+  if (!search) {
+    navigate("/products");
+    return;
+  }
+
+  navigate(`/products?search=${encodeURIComponent(search)}`);
+};
   const { cartItems } = useCart()
   const cartCount = cartItems.reduce(
     (total, item) => total + item.quantity,
@@ -47,11 +60,25 @@ function Navbar() {
 
             <div className="relative w-full">
 
-              <input
-                type="text"
-                placeholder="Search products, vendors and services..."
-                className="w-full rounded-lg border border-gray-300 py-2.5 pl-4 pr-12 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
-              />
+              <form
+  onSubmit={handleSearch}
+  className="flex flex-1 max-w-2xl"
+>
+  <input
+    type="text"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    placeholder="Search products, vendors and services..."
+    className="flex-1 rounded-l-lg border border-gray-300 px-5 py-3 outline-none focus:border-green-600"
+  />
+
+  <button
+    type="submit"
+    className="rounded-r-lg bg-green-600 px-6 text-white hover:bg-green-700"
+  >
+    Search
+  </button>
+</form>
 
               <button
                 className="absolute right-0 top-0 h-full px-4 bg-green-600 text-white rounded-r-lg hover:bg-green-700"

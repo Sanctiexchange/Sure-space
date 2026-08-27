@@ -69,6 +69,12 @@ function Account() {
                 {user.phone}
               </p>
 
+              <p>
+                <span className="font-semibold" bg-red>
+                  Billing Address: <input type="text" />
+               </span>
+              </p>
+
             </div>
 
           </div>
@@ -84,6 +90,8 @@ function Account() {
               View your previous purchases.
             </p>
 
+            
+
             <Link
               to="/orders"
               className="mt-5 inline-block font-semibold text-green-600 hover:text-green-700"
@@ -95,12 +103,23 @@ function Account() {
 
         </div>
 
+
         {/* Logout */}
         <button
           onClick={logout}
           className="mt-8 rounded-lg bg-red-600 px-6 py-3 font-semibold text-white hover:bg-red-700"
         >
           Logout
+        </button>
+
+          {/* home page*/}
+         <button>
+          <Link
+           to={`/`}
+           className="mt-8 rounded-lg bg-green-400 px-6 py-3 font-semibold text-white  hover:bg-blue-300"
+           >
+          Home
+          </Link>
         </button>
 
       </div>
