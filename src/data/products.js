@@ -10,7 +10,7 @@ const products = [
     reviews: 124,
     stock: 15,
     vendor: "TechHub Nigeria",
-    location: "Lagos",
+    location: "Apapa Lagos",
     image:
       "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800",
   },
@@ -26,7 +26,7 @@ const products = [
     reviews: 89,
     stock: 22,
     vendor: "Digital World",
-    location: "Abuja",
+    location: "Ogba Ikeja",
     image:
       "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=800",
   },
@@ -42,7 +42,7 @@ const products = [
     reviews: 67,
     stock: 30,
     vendor: "Urban Fashion",
-    location: "Lagos",
+    location: "Allen Avenue Ikeja, Lagos",
     image:
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800",
   },
@@ -90,7 +90,7 @@ const products = [
     reviews: 102,
     stock: 10,
     vendor: "ElectroMart",
-    location: "Abuja",
+    location: "Allen Avenue, Ikeja",
     image:
       "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800",
   },
@@ -106,7 +106,7 @@ const products = [
     reviews: 76,
     stock: 40,
     vendor: "Beauty Palace",
-    location: "Ibadan",
+    location: "Ikeja Lagos",
     image:
       "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800",
   },

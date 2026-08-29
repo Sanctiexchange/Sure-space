@@ -18,12 +18,9 @@ function Orders() {
           <p className="mt-2 text-gray-600">
             View your previous orders and track their status.
           </p>
-          <Link
-                        to={`/`}
-                        className="mt-3 inline-block text-sm font-semibold text-green-600 hover:text-green-700"
-                    >
-                            Return Home →
-                    </Link>
+          <Link to={`/`} className="mt-3 inline-block text-sm font-semibold text-green-600 hover:text-green-700">
+              Return Home
+          </Link>
         </div>
 
         {/* No Orders */}

@@ -57,10 +57,6 @@ function HeroSection() {
 
                 <Search size={20} />
 
-                <span className="hidden sm:inline">
-                  Search
-                </span>
-
               </button>
 
             </div>

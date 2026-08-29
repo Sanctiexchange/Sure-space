@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CartContext } from "./CartContext";
-
+import toast from "react-hot-toast";
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
@@ -14,6 +14,8 @@ export function CartProvider({ children }) {
 
       // Product already exists
       if (existingItem) {
+      toast.success(`${product.name} +1`);
+
         return currentItems.map((item) =>
           item.id === product.id
             ? {
@@ -23,6 +25,7 @@ export function CartProvider({ children }) {
             : item
         );
       }
+      toast.success(`${product.name} added to cart`);
       // Product does not exist
 
       return [

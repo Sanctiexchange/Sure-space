@@ -80,13 +80,7 @@ function Navbar() {
   </button>
 </form>
 
-              <button
-                className="absolute right-0 top-0 h-full px-4 bg-green-600 text-white rounded-r-lg hover:bg-green-700"
-              >
-                <Search size={20} />
-              </button>
-
-            </div>
+   </div>
 
           </div>
 

@@ -8,6 +8,7 @@ import {
 import { useCart } from "../../context/useCart.js"
 
 
+
 function ProductCard({ product }) {
 
   const { addToCart } = useCart()
