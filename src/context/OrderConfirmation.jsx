@@ -47,7 +47,6 @@ function OrderConfirmation() {
         <p className="mt-3 text-gray-500">
           Thank you for shopping with NaijaMarket.
           Your order has been received successfully.
-          kindly save your receipt for reference purposes.
           Naija Market is bringing the market to your door step.
         </p>
 
