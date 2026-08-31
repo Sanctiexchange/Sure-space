@@ -15,6 +15,8 @@ import Login from "./pages/Login"
 import ProtectedRoute from "./components/ProtectedRoute"
 import VendorDashboard from "./pages/VendorDashboard"
 import VendorAddProduct from "./pages/VendorAddProduct"
+import VendorProducts from "./pages/VendorProducts"
+
 function App() {
   return (
     <Routes>
@@ -38,6 +40,10 @@ function App() {
       <Route
          path="/vendor/dashboard"
          element={<VendorDashboard />}
+      />
+      <Route
+          path="/vendor/products"
+          element={<VendorProducts />}
       />
       <Route
           path="/order-details/:orderNumber"

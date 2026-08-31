@@ -77,7 +77,8 @@ function VendorDashboard() {
               Add Product
             </button>
 
-            <button className="rounded-lg border border-gray-300 bg-white px-6 py-4 font-semibold text-gray-800 hover:bg-gray-50">
+            <button className="rounded-lg border border-gray-300 bg-white px-6 py-4 font-semibold text-gray-800 hover:bg-gray-50"
+              onClick={() => navigate("/vendor/products")}>
               Manage Products
             </button>
 

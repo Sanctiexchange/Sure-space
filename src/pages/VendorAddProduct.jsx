@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { addVendorProduct } from "../utility/productStorage";
 
 function VendorAddProduct() {
   const navigate = useNavigate();
@@ -24,32 +25,21 @@ function VendorAddProduct() {
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    const newProduct = {
-      ...product,
-      id: Date.now(),
-      price: Number(product.price),
-      stock: Number(product.stock),
-    };
-
-    const savedProducts =
-      JSON.parse(localStorage.getItem("naijaMarketVendorProducts")) || [];
-
-    const updatedProducts = [
-      ...savedProducts,
-      newProduct,
-    ];
-
-    localStorage.setItem(
-      "naijaMarketVendorProducts",
-      JSON.stringify(updatedProducts)
-    );
-
-    alert("Product added successfully!");
-
-    navigate("/vendor/dashboard");
+  const newProduct = {
+    ...product,
+    id: Date.now(),
+    price: Number(product.price),
+    stock: Number(product.stock),
   };
+
+  addVendorProduct(newProduct);
+
+  alert("Product added successfully!");
+
+  navigate("/vendor/dashboard");
+};
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-8">
@@ -66,7 +56,7 @@ function VendorAddProduct() {
           </p>
         </div>
 
-        {/* Form */}
+        {/* Product Form */}
         <form
           onSubmit={handleSubmit}
           className="rounded-xl bg-white p-6 shadow-sm"
@@ -100,7 +90,7 @@ function VendorAddProduct() {
               name="price"
               value={product.price}
               onChange={handleChange}
-              placeholder="Enter price"
+              placeholder="Enter product price"
               min="0"
               required
               className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-green-600"
@@ -147,6 +137,14 @@ function VendorAddProduct() {
               <option value="Computers">
                 Computers
               </option>
+
+              <option value="Food">
+                Food
+              </option>
+
+              <option value="Sports">
+                Sports
+              </option>
             </select>
           </div>
 
@@ -184,7 +182,7 @@ function VendorAddProduct() {
             />
           </div>
 
-          {/* Image */}
+          {/* Image URL */}
           <div className="mb-5">
             <label className="mb-2 block font-semibold text-gray-800">
               Product Image URL
@@ -224,7 +222,7 @@ function VendorAddProduct() {
 
             <button
               type="submit"
-              className="flex-1 rounded-lg bg-green-600 px-6 py-3 font-semibold text-white hover:bg-green-700"
+              className="flex-1 rounded-lg bg-green-600 px-6 py-3 font-semibold text-white transition hover:bg-green-700"
             >
               Save Product
             </button>
@@ -232,7 +230,7 @@ function VendorAddProduct() {
             <button
               type="button"
               onClick={() => navigate("/vendor/dashboard")}
-              className="flex-1 rounded-lg border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-800 hover:bg-gray-50"
+              className="flex-1 rounded-lg border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-800 transition hover:bg-gray-50"
             >
               Cancel
             </button>
