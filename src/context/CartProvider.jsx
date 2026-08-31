@@ -7,36 +7,37 @@ export function CartProvider({ children }) {
 
   // Add a product to the cart
   const addToCart = (product) => {
-    setCartItems((currentItems) => {
-      const existingItem = currentItems.find(
-        (item) => item.id === product.id
+  const existingItem = cartItems.find(
+    (item) => item.id === product.id
+  );
+
+  setCartItems((currentItems) => {
+    if (existingItem) {
+      return currentItems.map((item) =>
+        item.id === product.id
+          ? {
+              ...item,
+              quantity: item.quantity + 1,
+            }
+          : item
       );
+    }
 
-      // Product already exists
-      if (existingItem) {
-      toast.success(`${product.name} +1`);
+    return [
+      ...currentItems,
+      {
+        ...product,
+        quantity: 1,
+      },
+    ];
+  });
 
-        return currentItems.map((item) =>
-          item.id === product.id
-            ? {
-                ...item,
-                quantity: item.quantity + 1,
-              }
-            : item
-        );
-      }
-      toast.success(`${product.name} added to cart`);
-      // Product does not exist
-
-      return [
-        ...currentItems,
-        {
-          ...product,
-          quantity: 1,
-        },
-      ];
-    });
-  };
+  if (existingItem) {
+    toast.success(`${product.name} quantity increased`);
+  } else {
+    toast.success(`${product.name} added to cart`);
+  }
+};
 
   // Increase product quantity
   const increaseQuantity = (productId) => {
@@ -50,6 +51,7 @@ export function CartProvider({ children }) {
           : item
       )
     );
+    toast.success("Quantity increased");
   };
 
 
@@ -65,6 +67,7 @@ export function CartProvider({ children }) {
           : item
       )
     );
+    toast.success("Quantity decreased");
   };
 
   // Remove a product from the cart
@@ -72,6 +75,7 @@ const removeFromCart = (productId) => {
   setCartItems((currentItems) =>
     currentItems.filter((item) => item.id !== productId)
   );
+  toast.success("Item Removed");
 };
 
   return (

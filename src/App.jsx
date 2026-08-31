@@ -13,7 +13,8 @@ import Register from "./pages/Register"
 import Account from "./pages/Account"
 import Login from "./pages/Login"
 import ProtectedRoute from "./components/ProtectedRoute"
-
+import VendorDashboard from "./pages/VendorDashboard"
+import VendorAddProduct from "./pages/VendorAddProduct"
 function App() {
   return (
     <Routes>
@@ -35,8 +36,16 @@ function App() {
           element={<Orders />}
       />
       <Route
+         path="/vendor/dashboard"
+         element={<VendorDashboard />}
+      />
+      <Route
           path="/order-details/:orderNumber"
           element={<OrderDetails />}
+      />
+      <Route
+          path="/vendor/add-product"
+          element={<VendorAddProduct />}
       />
       <Route
           path="/account"
