@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
-
+import { getVendorProducts } from "../utility/productStorage";
+import { useNavigate } from "react-router-dom";
 
 function VendorProducts() {
-  const [products, setProducts] = useState([]);
-
+    const [products, setProducts] = useState([]);
+    const navigate = useNavigate();
   useEffect(() => {
-    const savedProducts =
-      JSON.parse(
-        localStorage.getItem("naijaMarketVendorProducts")
-      ) || [];
+    const vendorProducts = getVendorProducts();
 
-    setProducts(savedProducts);
+    setProducts(vendorProducts);
   }, []);
 
   return (
@@ -51,7 +49,6 @@ function VendorProducts() {
             </p>
           </div>
         ) : (
-          /* Product List */
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
             {products.map((product) => (
@@ -101,6 +98,9 @@ function VendorProducts() {
 
                     <button
                       type="button"
+                      onClick={()=>
+                        navigate(`/vendor/edit-product/${product.id}`)
+                      }
                       className="flex-1 rounded-lg border border-gray-300 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-50"
                     >
                       Edit

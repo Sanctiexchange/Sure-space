@@ -16,7 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import VendorDashboard from "./pages/VendorDashboard"
 import VendorAddProduct from "./pages/VendorAddProduct"
 import VendorProducts from "./pages/VendorProducts"
-
+import VendorEditProduct from "./pages/VendorEditProduct"
 function App() {
   return (
     <Routes>
@@ -44,6 +44,10 @@ function App() {
       <Route
           path="/vendor/products"
           element={<VendorProducts />}
+      />
+      <Route
+           path="/vendor/edit-product/:productId"
+          element={<VendorEditProduct />}
       />
       <Route
           path="/order-details/:orderNumber"

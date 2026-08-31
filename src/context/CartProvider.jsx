@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CartContext } from "./CartContext";
 import toast from "react-hot-toast";
+import { toastWithSound } from "../utility/toastWithSound";
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
@@ -33,9 +34,9 @@ export function CartProvider({ children }) {
   });
 
   if (existingItem) {
-    toast.success(`${product.name} quantity increased`);
+    toastWithSound.success(`${product.name} quantity increased`);
   } else {
-    toast.success(`${product.name} added to cart`);
+    toastWithSound.success(`${product.name} added to cart`);
   }
 };
 
@@ -51,7 +52,7 @@ export function CartProvider({ children }) {
           : item
       )
     );
-    toast.success("Quantity increased");
+    toastWithSound.success("Quantity increased");
   };
 
 
@@ -67,7 +68,7 @@ export function CartProvider({ children }) {
           : item
       )
     );
-    toast.success("Quantity decreased");
+    toastWithSound.success("Quantity decreased");
   };
 
   // Remove a product from the cart

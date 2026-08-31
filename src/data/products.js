@@ -33,18 +33,18 @@ const products = [
 
   {
     id: 3,
-    name: "Men's Premium Sneakers",
-    price: 45000,
-    oldPrice: 60000,
+    name: "Lexus LX570",
+    price: 78000000,
+    oldPrice: 80000000,
     discount: 25,
-    category: "Fashion",
+    category: "Automobile",
     rating: 4.5,
     reviews: 67,
     stock: 30,
-    vendor: "Urban Fashion",
+    vendor: "Polanco Autos",
     location: "Allen Avenue Ikeja, Lagos",
     image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800",
+      "https://i.pinimg.com/1200x/59/1b/24/591b24b7ff4f4bee721202f0ca5c52bb.jpg",
   },
 
   {
@@ -65,18 +65,18 @@ const products = [
 
   {
     id: 5,
-    name: "Modern Office Chair",
-    price: 185000,
-    oldPrice: 220000,
+    name: "2022 Toyota Camry",
+    price: 18500000,
+    oldPrice: 22000000,
     discount: 16,
-    category: "Home & Living",
+    category: "Automobile",
     rating: 4.4,
     reviews: 38,
-    stock: 12,
-    vendor: "HomeStyle NG",
-    location: "Port-Harcourt",
+    stock: 4,
+    vendor: "Polanco Motors",
+    location: "Lagos Island",
     image:
-      "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800",
+      "https://cn-library.s3.eu-west-2.amazonaws.com/168933/IMG-20260116-WA0044-rjg8ismprrioyf5x72h09sod58qogqgek8ciqv6xz0.jpg",
   },
 
   {
