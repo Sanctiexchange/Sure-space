@@ -145,6 +145,10 @@ function VendorAddProduct() {
               <option value="Sports">
                 Sports
               </option>
+
+              <option value="Automobiles">
+                Automobiles
+              </option>
             </select>
           </div>
 

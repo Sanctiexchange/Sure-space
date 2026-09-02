@@ -77,19 +77,19 @@ function VendorProducts() {
                     ₦{product.price.toLocaleString()}
                   </p>
 
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-blue-600">
                     Category: {product.category}
                   </p>
 
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-sm text-black-500">
                     Location: {product.location}
                   </p>
 
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-sm text-yellow-800">
                     Stock: {product.stock}
                   </p>
 
-                  <p className="mt-3 line-clamp-3 text-sm text-gray-600">
+                  <p className="mt-3 line-clamp-3 text-sm text-gray-900">
                     {product.description}
                   </p>
 

@@ -183,8 +183,8 @@ function VendorEditProduct() {
                 Sports
               </option>
 
-              <option value="Cars">
-                Cars
+              <option value="Automobiles">
+                Automobiles
             </option>
 
             </select>

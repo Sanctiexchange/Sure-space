@@ -1,83 +1,95 @@
 import { useState } from "react";
 import { CartContext } from "./CartContext";
-import toast from "react-hot-toast";
 import { toastWithSound } from "../utility/toastWithSound";
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
 
-  // Add a product to the cart
+  // =========================================
+  // ADD PRODUCT TO CART
+  // =========================================
   const addToCart = (product) => {
-  const existingItem = cartItems.find(
-    (item) => item.id === product.id
-  );
-
-  setCartItems((currentItems) => {
-    if (existingItem) {
-      return currentItems.map((item) =>
-        item.id === product.id
-          ? {
-              ...item,
-              quantity: item.quantity + 1,
-            }
-          : item
+    setCartItems((currentItems) => {
+      const existingItem = currentItems.find(
+        (item) => item.id === product.id
       );
-    }
 
-    return [
-      ...currentItems,
-      {
-        ...product,
-        quantity: 1,
-      },
-    ];
-  });
+      if (existingItem) {
+        toastWithSound.success(
+          `${product.name} quantity increased`
+        );
 
-  if (existingItem) {
-    toastWithSound.success(`${product.name} quantity increased`);
-  } else {
-    toastWithSound.success(`${product.name} added to cart`);
-  }
-};
+        return currentItems.map((item) =>
+          item.id === product.id
+            ? {
+                ...item,
+                quantity: Number(item.quantity || 0) + 1,
+              }
+            : item
+        );
+      }
 
-  // Increase product quantity
+      toastWithSound.success(
+        `${product.name} added to cart`
+      );
+
+      return [
+        ...currentItems,
+        {
+          ...product,
+          quantity: 1,
+        },
+      ];
+    });
+  };
+
+  // =========================================
+  // INCREASE QUANTITY
+  // =========================================
   const increaseQuantity = (productId) => {
     setCartItems((currentItems) =>
       currentItems.map((item) =>
         item.id === productId
           ? {
               ...item,
-              quantity: item.quantity + 1,
+              quantity: Number(item.quantity || 0) + 1,
             }
           : item
       )
     );
-    toastWithSound.success("Quantity increased");
   };
 
-
-  // Decrease product quantity
+  // =========================================
+  // DECREASE QUANTITY
+  // =========================================
   const decreaseQuantity = (productId) => {
     setCartItems((currentItems) =>
       currentItems.map((item) =>
-        item.id === productId && item.quantity > 1
+        item.id === productId
           ? {
               ...item,
-              quantity: item.quantity - 1,
+              quantity: Math.max(
+                1,
+                Number(item.quantity || 1) - 1
+              ),
             }
           : item
       )
     );
-    toastWithSound.success("Quantity decreased");
   };
 
-  // Remove a product from the cart
-const removeFromCart = (productId) => {
-  setCartItems((currentItems) =>
-    currentItems.filter((item) => item.id !== productId)
-  );
-  toast.success("Item Removed");
-};
+  // =========================================
+  // REMOVE PRODUCT
+  // =========================================
+  const removeFromCart = (productId) => {
+    setCartItems((currentItems) =>
+      currentItems.filter(
+        (item) => item.id !== productId
+      )
+    );
+
+    toastWithSound.success("Item removed from cart");
+  };
 
   return (
     <CartContext.Provider
