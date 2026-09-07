@@ -25,7 +25,7 @@ function CategoryCard({ category }) {
       </div>
 
     </div>
-  )
+  );
 }
 
 export default CategoryCard

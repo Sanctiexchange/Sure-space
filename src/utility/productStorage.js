@@ -47,3 +47,15 @@ export function addVendorProduct(product) {
 
   return updatedProducts;
 }
+
+export function deleteVendorProduct(productId) {
+  const currentProducts = getVendorProducts();
+
+  const updatedProducts = currentProducts.filter(
+    (product) => product.id !== Number(productId)
+  );
+
+  saveVendorProducts(updatedProducts);
+
+  return updatedProducts;
+}

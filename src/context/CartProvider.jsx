@@ -5,20 +5,14 @@ import { toastWithSound } from "../utility/toastWithSound";
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
 
-  // =========================================
-  // ADD PRODUCT TO CART
-  // =========================================
+  // Add a product to the cart
   const addToCart = (product) => {
+    const existingItem = cartItems.find(
+      (item) => item.id === product.id
+    );
+
     setCartItems((currentItems) => {
-      const existingItem = currentItems.find(
-        (item) => item.id === product.id
-      );
-
       if (existingItem) {
-        toastWithSound.success(
-          `${product.name} quantity increased`
-        );
-
         return currentItems.map((item) =>
           item.id === product.id
             ? {
@@ -29,10 +23,6 @@ export function CartProvider({ children }) {
         );
       }
 
-      toastWithSound.success(
-        `${product.name} added to cart`
-      );
-
       return [
         ...currentItems,
         {
@@ -41,11 +31,16 @@ export function CartProvider({ children }) {
         },
       ];
     });
+
+    // Toast runs once, outside the state updater
+    if (existingItem) {
+      toastWithSound.success(`${product.name} quantity increased`);
+    } else {
+      toastWithSound.success(`${product.name} added to cart`);
+    }
   };
 
-  // =========================================
-  // INCREASE QUANTITY
-  // =========================================
+  // Increase product quantity
   const increaseQuantity = (productId) => {
     setCartItems((currentItems) =>
       currentItems.map((item) =>
@@ -57,38 +52,33 @@ export function CartProvider({ children }) {
           : item
       )
     );
+
+    toastWithSound.success("Quantity increased");
   };
 
-  // =========================================
-  // DECREASE QUANTITY
-  // =========================================
+  // Decrease product quantity
   const decreaseQuantity = (productId) => {
     setCartItems((currentItems) =>
       currentItems.map((item) =>
         item.id === productId
           ? {
               ...item,
-              quantity: Math.max(
-                1,
-                Number(item.quantity || 1) - 1
-              ),
+              quantity: Math.max(1, Number(item.quantity || 1) - 1),
             }
           : item
       )
     );
+
+    toastWithSound.success("Quantity decreased");
   };
 
-  // =========================================
-  // REMOVE PRODUCT
-  // =========================================
+  // Remove a product from the cart
   const removeFromCart = (productId) => {
     setCartItems((currentItems) =>
-      currentItems.filter(
-        (item) => item.id !== productId
-      )
+      currentItems.filter((item) => item.id !== productId)
     );
 
-    toastWithSound.success("Item removed from cart");
+    toastWithSound.success("Item removed");
   };
 
   return (
