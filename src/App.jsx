@@ -17,6 +17,7 @@ import VendorDashboard from "./pages/VendorDashboard"
 import VendorAddProduct from "./pages/VendorAddProduct"
 import VendorProducts from "./pages/VendorProducts"
 import VendorEditProduct from "./pages/VendorEditProduct"
+import VendorOrders from "./pages/VendorOrders"
 function App() {
   return (
     <Routes>
@@ -45,6 +46,12 @@ function App() {
           path="/vendor/products"
           element={<VendorProducts />}
       />
+
+      <Route
+          path="/vendor/orders"
+          element={<VendorOrders />}
+      />
+
       <Route
            path="/vendor/edit-product/:productId"
           element={<VendorEditProduct />}
