@@ -64,6 +64,11 @@ function App() {
           path="/vendor/add-product"
           element={<VendorAddProduct />}
       />
+    <Route
+          path="/vendor/orders"
+          element={<VendorOrders />}
+      />
+
       <Route
           path="/account"
           element={
@@ -72,7 +77,7 @@ function App() {
       </ProtectedRoute>
        }
       />
-      
+
       <Route path="/login" element={<Login />} />
       <Route path="/footer" element={<MainLayout><Footer /></MainLayout >} />
     </Routes>
