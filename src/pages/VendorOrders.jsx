@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-
-import { getVendorProducts } from "../utility/productStorage";
+import {
+  getVendorProducts,
+} from "../utility/productStorage";
 
 function VendorOrders() {
   const [orders, setOrders] = useState([]);
@@ -25,19 +26,21 @@ function VendorOrders() {
       setVendorProducts(savedVendorProducts);
 
       /*
-       * Find products that belong to this vendor.
+       * Get the IDs of products belonging
+       * to this vendor.
        */
       const vendorProductIds =
-        savedVendorProducts.map(
-          (product) => Number(product.id)
+        savedVendorProducts.map((product) =>
+          Number(product.id)
         );
 
       /*
-       * Find orders containing this vendor's products.
+       * Find orders containing at least
+       * one vendor product.
        */
-      const vendorOrders = parsedOrders.filter(
-        (order) => {
-          if (!order.items) {
+      const matchingOrders =
+        parsedOrders.filter((order) => {
+          if (!Array.isArray(order.items)) {
             return false;
           }
 
@@ -46,10 +49,9 @@ function VendorOrders() {
               Number(item.id)
             )
           );
-        }
-      );
+        });
 
-      setOrders(vendorOrders);
+      setOrders(matchingOrders);
     } catch (error) {
       console.error(
         "Error loading vendor orders:",
@@ -60,14 +62,18 @@ function VendorOrders() {
     }
   };
 
+  /*
+   * Return only the products in an order
+   * that belong to this vendor.
+   */
   const getVendorItems = (order) => {
-    if (!order.items) {
+    if (!Array.isArray(order.items)) {
       return [];
     }
 
     const vendorProductIds =
-      vendorProducts.map(
-        (product) => Number(product.id)
+      vendorProducts.map((product) =>
+        Number(product.id)
       );
 
     return order.items.filter((item) =>
@@ -75,10 +81,6 @@ function VendorOrders() {
         Number(item.id)
       )
     );
-  };
-
-  const getOrderStatus = (order) => {
-    return order.status || "Pending";
   };
 
   const getStatusStyle = (status) => {
@@ -94,6 +96,9 @@ function VendorOrders() {
 
       case "Cancelled":
         return "bg-red-100 text-red-700";
+
+      case "Order Received":
+        return "bg-purple-100 text-purple-700";
 
       default:
         return "bg-gray-100 text-gray-700";
@@ -111,13 +116,14 @@ function VendorOrders() {
           </h1>
 
           <p className="mt-1 text-gray-600">
-            View orders containing your products
+            Manage orders containing your products
           </p>
         </div>
 
         {/* Statistics */}
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 
+          {/* Total Orders */}
           <div className="rounded-xl bg-white p-5 shadow">
             <p className="text-sm text-gray-500">
               Total Orders
@@ -128,6 +134,7 @@ function VendorOrders() {
             </p>
           </div>
 
+          {/* Products */}
           <div className="rounded-xl bg-white p-5 shadow">
             <p className="text-sm text-gray-500">
               Your Products
@@ -138,17 +145,18 @@ function VendorOrders() {
             </p>
           </div>
 
+          {/* Order Received */}
           <div className="rounded-xl bg-white p-5 shadow">
             <p className="text-sm text-gray-500">
-              Pending Orders
+              New Orders
             </p>
 
-            <p className="mt-2 text-3xl font-bold text-yellow-600">
+            <p className="mt-2 text-3xl font-bold text-purple-600">
               {
                 orders.filter(
                   (order) =>
-                    getOrderStatus(order) ===
-                    "Pending"
+                    order.status ===
+                    "Order Received"
                 ).length
               }
             </p>
@@ -156,7 +164,7 @@ function VendorOrders() {
 
         </div>
 
-        {/* Orders */}
+        {/* No Orders */}
         {orders.length === 0 ? (
           <div className="rounded-xl bg-white p-10 text-center shadow">
 
@@ -178,86 +186,145 @@ function VendorOrders() {
 
           <div className="space-y-6">
 
-            {orders.map((order, index) => {
+            {orders.map((order) => {
 
               const vendorItems =
                 getVendorItems(order);
 
               return (
                 <div
-                  key={
-                    order.id ||
-                    order.orderId ||
-                    index
-                  }
+                  key={order.orderNumber}
                   className="overflow-hidden rounded-xl bg-white shadow"
                 >
 
                   {/* Order Header */}
-                  <div className="flex flex-col gap-4 border-b p-5 md:flex-row md:items-center md:justify-between">
+                  <div className="border-b bg-gray-50 p-5">
 
-                    <div>
-                      <p className="text-sm text-gray-500">
-                        Order ID
-                      </p>
+                    <div className="grid gap-5 md:grid-cols-4">
 
-                      <p className="font-bold text-gray-800">
-                        {order.id ||
-                          order.orderId ||
-                          `ORDER-${index + 1}`}
-                      </p>
-                    </div>
+                      {/* Order Number */}
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Order Number
+                        </p>
 
-                    <div>
-                      <p className="text-sm text-gray-500">
-                        Customer
-                      </p>
+                        <p className="mt-1 font-bold text-gray-800">
+                          {order.orderNumber}
+                        </p>
+                      </div>
 
-                      <p className="font-semibold text-gray-800">
-                        {order.user?.name ||
-                          order.customerName ||
-                          "Customer"}
-                      </p>
-                    </div>
+                      {/* Customer */}
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Customer
+                        </p>
 
-                    <div>
-                      <p className="text-sm text-gray-500">
-                        Status
-                      </p>
+                        <p className="mt-1 font-semibold text-gray-800">
+                          {order.customer?.fullName ||
+                            "Customer"}
+                        </p>
+                      </div>
 
-                      <span
-                        className={`mt-1 inline-block rounded-full px-3 py-1 text-sm font-semibold ${getStatusStyle(
-                          getOrderStatus(order)
-                        )}`}
-                      >
-                        {getOrderStatus(order)}
-                      </span>
+                      {/* Date */}
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Order Date
+                        </p>
+
+                        <p className="mt-1 font-medium text-gray-700">
+                          {order.createdAt
+                            ? new Date(
+                                order.createdAt
+                              ).toLocaleDateString()
+                            : "N/A"}
+                        </p>
+                      </div>
+
+                      {/* Status */}
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Status
+                        </p>
+
+                        <span
+                          className={`mt-1 inline-block rounded-full px-3 py-1 text-sm font-semibold ${getStatusStyle(
+                            order.status
+                          )}`}
+                        >
+                          {order.status ||
+                            "Order Received"}
+                        </span>
+                      </div>
+
                     </div>
 
                   </div>
 
-                  {/* Products */}
+                  {/* Customer Contact */}
+                  <div className="border-b p-5">
+
+                    <h2 className="mb-4 text-lg font-bold text-gray-800">
+                      Customer Information
+                    </h2>
+
+                    <div className="grid gap-4 sm:grid-cols-3">
+
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Full Name
+                        </p>
+
+                        <p className="font-medium text-gray-800">
+                          {order.customer?.fullName ||
+                            "N/A"}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Phone
+                        </p>
+
+                        <p className="font-medium text-gray-800">
+                          {order.customer?.phone ||
+                            "N/A"}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Email
+                        </p>
+
+                        <p className="break-all font-medium text-gray-800">
+                          {order.customer?.email ||
+                            "N/A"}
+                        </p>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  {/* Vendor Products */}
                   <div className="p-5">
 
                     <h2 className="mb-4 text-lg font-bold text-gray-800">
-                      Your Products in This Order
+                      Your Products
                     </h2>
 
                     <div className="space-y-4">
 
                       {vendorItems.map(
-                        (item, itemIndex) => (
+                        (item) => (
 
                           <div
-                            key={
-                              item.id ||
-                              itemIndex
-                            }
-                            className="flex flex-col gap-4 rounded-lg bg-gray-50 p-4 sm:flex-row sm:items-center"
+                            key={item.id}
+                            className="flex flex-col gap-4 rounded-xl bg-gray-50 p-4 sm:flex-row sm:items-center"
                           >
 
-                            {/* Image */}
-                            <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200">
+                            {/* Product Image */}
+                            <div className="h-20 w-20 `shrink-0` overflow-hidden rounded-lg bg-gray-200">
 
                               {item.image ? (
                                 <img
@@ -273,7 +340,7 @@ function VendorOrders() {
 
                             </div>
 
-                            {/* Details */}
+                            {/* Product Details */}
                             <div className="flex-1">
 
                               <h3 className="font-semibold text-gray-800">
@@ -288,10 +355,10 @@ function VendorOrders() {
                             </div>
 
                             {/* Price */}
-                            <div className="text-left sm:text-right">
+                            <div className="sm:text-right">
 
                               <p className="text-sm text-gray-500">
-                                Price
+                                Unit Price
                               </p>
 
                               <p className="font-bold text-blue-600">
@@ -310,22 +377,53 @@ function VendorOrders() {
 
                     </div>
 
-                    {/* Order date */}
-                    {order.createdAt && (
-                      <div className="mt-5 border-t pt-4">
+                    {/* Order Summary */}
+                    <div className="mt-6 border-t pt-5">
 
-                        <p className="text-sm text-gray-500">
-                          Order Date
-                        </p>
+                      <div className="ml-auto max-w-sm space-y-2">
 
-                        <p className="font-medium text-gray-700">
-                          {new Date(
-                            order.createdAt
-                          ).toLocaleString()}
-                        </p>
+                        <div className="flex justify-between text-gray-600">
+                          <span>
+                            Order Subtotal
+                          </span>
+
+                          <span>
+                            ₦
+                            {Number(
+                              order.subtotal || 0
+                            ).toLocaleString()}
+                          </span>
+                        </div>
+
+                        <div className="flex justify-between text-gray-600">
+                          <span>
+                            Delivery Fee
+                          </span>
+
+                          <span>
+                            ₦
+                            {Number(
+                              order.deliveryFee || 0
+                            ).toLocaleString()}
+                          </span>
+                        </div>
+
+                        <div className="flex justify-between border-t pt-2 text-lg font-bold text-gray-800">
+                          <span>
+                            Order Total
+                          </span>
+
+                          <span>
+                            ₦
+                            {Number(
+                              order.total || 0
+                            ).toLocaleString()}
+                          </span>
+                        </div>
 
                       </div>
-                    )}
+
+                    </div>
 
                   </div>
 
