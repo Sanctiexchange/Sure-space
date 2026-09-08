@@ -38,9 +38,23 @@ export function saveVendorProducts(products) {
 export function addVendorProduct(product) {
   const currentProducts = getVendorProducts();
 
+  const newProduct = {
+    ...product,
+
+    // Every newly submitted vendor product
+    // must wait for admin approval.
+    approvalStatus: "pending",
+
+    // Information we will use later
+    // in the admin approval system.
+    rejectionReason: "",
+    approvedAt: null,
+    approvedBy: null,
+  };
+
   const updatedProducts = [
     ...currentProducts,
-    product,
+    newProduct,
   ];
 
   saveVendorProducts(updatedProducts);
