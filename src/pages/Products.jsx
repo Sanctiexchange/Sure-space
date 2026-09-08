@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 
-import { getMarketplaceProducts } from "../utility/marketplaceProducts";
+import { getMarketplaceProducts } from "./utility/marketplaceProducts";
 
 function Products() {
   const [searchParams] = useSearchParams();
