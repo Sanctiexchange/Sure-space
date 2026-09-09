@@ -41,14 +41,12 @@ export function addVendorProduct(product) {
   const newProduct = {
     ...product,
 
-    // Every newly submitted vendor product
-    // must wait for admin approval.
     approvalStatus: "pending",
 
-    // Information we will use later
-    // in the admin approval system.
     rejectionReason: "",
+
     approvedAt: null,
+
     approvedBy: null,
   };
 
@@ -62,11 +60,74 @@ export function addVendorProduct(product) {
   return updatedProducts;
 }
 
+export function approveVendorProduct(
+  productId,
+  adminName = "Admin"
+) {
+  const currentProducts = getVendorProducts();
+
+  const updatedProducts = currentProducts.map(
+    (product) => {
+      if (product.id === Number(productId)) {
+        return {
+          ...product,
+
+          approvalStatus: "approved",
+
+          approvedAt: new Date().toISOString(),
+
+          approvedBy: adminName,
+
+          rejectionReason: "",
+        };
+      }
+
+      return product;
+    }
+  );
+
+  saveVendorProducts(updatedProducts);
+
+  return updatedProducts;
+}
+
+export function rejectVendorProduct(
+  productId,
+  reason = ""
+) {
+  const currentProducts = getVendorProducts();
+
+  const updatedProducts = currentProducts.map(
+    (product) => {
+      if (product.id === Number(productId)) {
+        return {
+          ...product,
+
+          approvalStatus: "rejected",
+
+          rejectionReason: reason,
+
+          approvedAt: null,
+
+          approvedBy: null,
+        };
+      }
+
+      return product;
+    }
+  );
+
+  saveVendorProducts(updatedProducts);
+
+  return updatedProducts;
+}
+
 export function deleteVendorProduct(productId) {
   const currentProducts = getVendorProducts();
 
   const updatedProducts = currentProducts.filter(
-    (product) => product.id !== Number(productId)
+    (product) =>
+      product.id !== Number(productId)
   );
 
   saveVendorProducts(updatedProducts);

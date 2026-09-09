@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   getVendorProducts,
-} from "../utility/productStorage";
+} from "../utility/ProductStorage";
 
 function VendorOrders() {
   const [orders, setOrders] = useState([]);

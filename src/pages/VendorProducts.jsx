@@ -5,7 +5,7 @@ import {
   getVendorProducts,
   deleteVendorProduct,
   saveVendorProducts,
-} from "../utility/productStorage";
+} from "../utility/ProductStorage";
 
 function VendorProducts() {
   const navigate = useNavigate();

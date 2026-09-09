@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   getVendorProducts,
   saveVendorProducts,
-} from "../utility/productStorage";
+} from "../utility/ProductStorage";
 
 function VendorEditProduct() {
   const navigate = useNavigate();

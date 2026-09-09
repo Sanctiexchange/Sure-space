@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addVendorProduct } from "../utility/productStorage";
+import { addVendorProduct } from "../utility/ProductStorage";
 
 function VendorAddProduct() {
   const navigate = useNavigate();

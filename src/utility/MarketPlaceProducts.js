@@ -1,5 +1,5 @@
 import products from "../data/products";
-import { getVendorProducts } from "./productStorage";
+import { getVendorProducts } from "./ProductStorage";
 
 export function getMarketplaceProducts() {
   const vendorProducts = getVendorProducts();
