@@ -53,13 +53,13 @@ function App() {
       />
 
       <Route
-        path="/product-details"
-        element={
-          <MainLayout>
-            <ProductDetails />
-          </MainLayout>
-        }
-      />
+  path="/product-details/:productId"
+  element={
+    <MainLayout>
+      <ProductDetails />
+    </MainLayout>
+  }
+/>
 
       <Route
         path="/cart"
