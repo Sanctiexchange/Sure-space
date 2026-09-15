@@ -131,7 +131,7 @@ function ProductDetails() {
             <img
               src={product.image}
               alt={product.name}
-              className="max-h-[550px] w-full rounded-xl object-contain"
+              className="max-h-`1375` w-full rounded-xl object-contain"
             />
 
           </div>
