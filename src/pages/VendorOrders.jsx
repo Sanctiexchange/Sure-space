@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  getVendorProducts,
-} from "../utility/ProductStorage";
+import { getVendorProducts } from "../utility/ProductStorage";
 
 function VendorOrders() {
   const [orders, setOrders] = useState([]);
@@ -13,11 +11,8 @@ function VendorOrders() {
 
   const loadVendorOrders = () => {
     try {
-      const savedOrders =
-        localStorage.getItem("naijaMarketOrders");
-
-      const savedVendorProducts =
-        getVendorProducts();
+      const savedOrders = localStorage.getItem("naijaMarketOrders");
+      const savedVendorProducts = getVendorProducts();
 
       const parsedOrders = savedOrders
         ? JSON.parse(savedOrders)
@@ -25,62 +20,79 @@ function VendorOrders() {
 
       setVendorProducts(savedVendorProducts);
 
-      /*
-       * Get the IDs of products belonging
-       * to this vendor.
-       */
-      const vendorProductIds =
-        savedVendorProducts.map((product) =>
-          Number(product.id)
+      const vendorProductIds = savedVendorProducts.map(
+        (product) => Number(product.id)
+      );
+
+      const matchingOrders = parsedOrders.filter((order) => {
+        if (!Array.isArray(order.items)) {
+          return false;
+        }
+
+        return order.items.some((item) =>
+          vendorProductIds.includes(Number(item.id))
         );
-
-      /*
-       * Find orders containing at least
-       * one vendor product.
-       */
-      const matchingOrders =
-        parsedOrders.filter((order) => {
-          if (!Array.isArray(order.items)) {
-            return false;
-          }
-
-          return order.items.some((item) =>
-            vendorProductIds.includes(
-              Number(item.id)
-            )
-          );
-        });
+      });
 
       setOrders(matchingOrders);
     } catch (error) {
-      console.error(
-        "Error loading vendor orders:",
-        error
-      );
-
+      console.error("Error loading vendor orders:", error);
       setOrders([]);
     }
   };
 
-  /*
-   * Return only the products in an order
-   * that belong to this vendor.
-   */
   const getVendorItems = (order) => {
     if (!Array.isArray(order.items)) {
       return [];
     }
 
-    const vendorProductIds =
-      vendorProducts.map((product) =>
-        Number(product.id)
-      );
+    const vendorProductIds = vendorProducts.map(
+      (product) => Number(product.id)
+    );
 
     return order.items.filter((item) =>
-      vendorProductIds.includes(
-        Number(item.id)
-      )
+      vendorProductIds.includes(Number(item.id))
     );
+  };
+
+  // Update order status
+  const updateOrderStatus = (orderNumber, newStatus) => {
+    try {
+      const savedOrders = localStorage.getItem("naijaMarketOrders");
+
+      const parsedOrders = savedOrders
+        ? JSON.parse(savedOrders)
+        : [];
+
+      const updatedOrders = parsedOrders.map((order) => {
+        if (order.orderNumber === orderNumber) {
+          return {
+            ...order,
+            status: newStatus,
+          };
+        }
+
+        return order;
+      });
+
+      localStorage.setItem(
+        "naijaMarketOrders",
+        JSON.stringify(updatedOrders)
+      );
+
+      setOrders((currentOrders) =>
+        currentOrders.map((order) =>
+          order.orderNumber === orderNumber
+            ? {
+                ...order,
+                status: newStatus,
+              }
+            : order
+        )
+      );
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
   };
 
   const getStatusStyle = (status) => {
@@ -123,7 +135,6 @@ function VendorOrders() {
         {/* Statistics */}
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 
-          {/* Total Orders */}
           <div className="rounded-xl bg-white p-5 shadow">
             <p className="text-sm text-gray-500">
               Total Orders
@@ -134,7 +145,6 @@ function VendorOrders() {
             </p>
           </div>
 
-          {/* Products */}
           <div className="rounded-xl bg-white p-5 shadow">
             <p className="text-sm text-gray-500">
               Your Products
@@ -145,7 +155,6 @@ function VendorOrders() {
             </p>
           </div>
 
-          {/* Order Received */}
           <div className="rounded-xl bg-white p-5 shadow">
             <p className="text-sm text-gray-500">
               New Orders
@@ -154,9 +163,7 @@ function VendorOrders() {
             <p className="mt-2 text-3xl font-bold text-purple-600">
               {
                 orders.filter(
-                  (order) =>
-                    order.status ===
-                    "Order Received"
+                  (order) => order.status === "Order Received"
                 ).length
               }
             </p>
@@ -164,7 +171,7 @@ function VendorOrders() {
 
         </div>
 
-        {/* No Orders */}
+        {/* Orders */}
         {orders.length === 0 ? (
           <div className="rounded-xl bg-white p-10 text-center shadow">
 
@@ -177,19 +184,15 @@ function VendorOrders() {
             </h2>
 
             <p className="mt-2 text-gray-500">
-              Orders containing your products
-              will appear here.
+              Orders containing your products will appear here.
             </p>
 
           </div>
         ) : (
-
           <div className="space-y-6">
 
             {orders.map((order) => {
-
-              const vendorItems =
-                getVendorItems(order);
+              const vendorItems = getVendorItems(order);
 
               return (
                 <div
@@ -202,7 +205,6 @@ function VendorOrders() {
 
                     <div className="grid gap-5 md:grid-cols-4">
 
-                      {/* Order Number */}
                       <div>
                         <p className="text-sm text-gray-500">
                           Order Number
@@ -213,19 +215,16 @@ function VendorOrders() {
                         </p>
                       </div>
 
-                      {/* Customer */}
                       <div>
                         <p className="text-sm text-gray-500">
                           Customer
                         </p>
 
                         <p className="mt-1 font-semibold text-gray-800">
-                          {order.customer?.fullName ||
-                            "Customer"}
+                          {order.customer?.fullName || "Customer"}
                         </p>
                       </div>
 
-                      {/* Date */}
                       <div>
                         <p className="text-sm text-gray-500">
                           Order Date
@@ -251,8 +250,7 @@ function VendorOrders() {
                             order.status
                           )}`}
                         >
-                          {order.status ||
-                            "Order Received"}
+                          {order.status || "Order Received"}
                         </span>
                       </div>
 
@@ -260,7 +258,7 @@ function VendorOrders() {
 
                   </div>
 
-                  {/* Customer Contact */}
+                  {/* Customer Information */}
                   <div className="border-b p-5">
 
                     <h2 className="mb-4 text-lg font-bold text-gray-800">
@@ -275,8 +273,7 @@ function VendorOrders() {
                         </p>
 
                         <p className="font-medium text-gray-800">
-                          {order.customer?.fullName ||
-                            "N/A"}
+                          {order.customer?.fullName || "N/A"}
                         </p>
                       </div>
 
@@ -286,8 +283,7 @@ function VendorOrders() {
                         </p>
 
                         <p className="font-medium text-gray-800">
-                          {order.customer?.phone ||
-                            "N/A"}
+                          {order.customer?.phone || "N/A"}
                         </p>
                       </div>
 
@@ -297,8 +293,7 @@ function VendorOrders() {
                         </p>
 
                         <p className="break-all font-medium text-gray-800">
-                          {order.customer?.email ||
-                            "N/A"}
+                          {order.customer?.email || "N/A"}
                         </p>
                       </div>
 
@@ -315,65 +310,60 @@ function VendorOrders() {
 
                     <div className="space-y-4">
 
-                      {vendorItems.map(
-                        (item) => (
+                      {vendorItems.map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex flex-col gap-4 rounded-xl bg-gray-50 p-4 sm:flex-row sm:items-center"
+                        >
 
-                          <div
-                            key={item.id}
-                            className="flex flex-col gap-4 rounded-xl bg-gray-50 p-4 sm:flex-row sm:items-center"
-                          >
+                          {/* Image */}
+                          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-gray-200">
 
-                            {/* Product Image */}
-                            <div className="h-20 w-20 `shrink-0` overflow-hidden rounded-lg bg-gray-200">
-
-                              {item.image ? (
-                                <img
-                                  src={item.image}
-                                  alt={item.name}
-                                  className="h-full w-full object-cover"
-                                />
-                              ) : (
-                                <div className="flex h-full items-center justify-center text-xs text-gray-500">
-                                  No Image
-                                </div>
-                              )}
-
-                            </div>
-
-                            {/* Product Details */}
-                            <div className="flex-1">
-
-                              <h3 className="font-semibold text-gray-800">
-                                {item.name}
-                              </h3>
-
-                              <p className="mt-1 text-sm text-gray-500">
-                                Quantity:{" "}
-                                {item.quantity || 1}
-                              </p>
-
-                            </div>
-
-                            {/* Price */}
-                            <div className="sm:text-right">
-
-                              <p className="text-sm text-gray-500">
-                                Unit Price
-                              </p>
-
-                              <p className="font-bold text-blue-600">
-                                ₦
-                                {Number(
-                                  item.price || 0
-                                ).toLocaleString()}
-                              </p>
-
-                            </div>
+                            {item.image ? (
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <div className="flex h-full items-center justify-center text-xs text-gray-500">
+                                No Image
+                              </div>
+                            )}
 
                           </div>
 
-                        )
-                      )}
+                          {/* Details */}
+                          <div className="flex-1">
+
+                            <h3 className="font-semibold text-gray-800">
+                              {item.name}
+                            </h3>
+
+                            <p className="mt-1 text-sm text-gray-500">
+                              Quantity: {item.quantity || 1}
+                            </p>
+
+                          </div>
+
+                          {/* Price */}
+                          <div className="sm:text-right">
+
+                            <p className="text-sm text-gray-500">
+                              Unit Price
+                            </p>
+
+                            <p className="font-bold text-blue-600">
+                              ₦
+                              {Number(
+                                item.price || 0
+                              ).toLocaleString()}
+                            </p>
+
+                          </div>
+
+                        </div>
+                      ))}
 
                     </div>
 
@@ -383,9 +373,7 @@ function VendorOrders() {
                       <div className="ml-auto max-w-sm space-y-2">
 
                         <div className="flex justify-between text-gray-600">
-                          <span>
-                            Order Subtotal
-                          </span>
+                          <span>Order Subtotal</span>
 
                           <span>
                             ₦
@@ -396,9 +384,7 @@ function VendorOrders() {
                         </div>
 
                         <div className="flex justify-between text-gray-600">
-                          <span>
-                            Delivery Fee
-                          </span>
+                          <span>Delivery Fee</span>
 
                           <span>
                             ₦
@@ -409,9 +395,7 @@ function VendorOrders() {
                         </div>
 
                         <div className="flex justify-between border-t pt-2 text-lg font-bold text-gray-800">
-                          <span>
-                            Order Total
-                          </span>
+                          <span>Order Total</span>
 
                           <span>
                             ₦
@@ -422,6 +406,46 @@ function VendorOrders() {
                         </div>
 
                       </div>
+
+                    </div>
+
+                    {/* Update Status */}
+                    <div className="mt-6 border-t pt-5">
+
+                      <label className="mb-2 block text-sm font-semibold text-gray-700">
+                        Update Order Status
+                      </label>
+
+                      <select
+                        value={order.status || "Order Received"}
+                        onChange={(event) =>
+                          updateOrderStatus(
+                            order.orderNumber,
+                            event.target.value
+                          )
+                        }
+                        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-green-600 sm:max-w-sm"
+                      >
+                        <option value="Order Received">
+                          Order Received
+                        </option>
+
+                        <option value="Processing">
+                          Processing
+                        </option>
+
+                        <option value="Shipped">
+                          Shipped
+                        </option>
+
+                        <option value="Delivered">
+                          Delivered
+                        </option>
+
+                        <option value="Cancelled">
+                          Cancelled
+                        </option>
+                      </select>
 
                     </div>
 

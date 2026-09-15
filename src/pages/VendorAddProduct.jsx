@@ -1,9 +1,17 @@
 import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../context/AuthContext";
+
 import { addVendorProduct } from "../utility/ProductStorage";
+
+import { getVendorId } from "../utility/VendorIdentity";
 
 function VendorAddProduct() {
   const navigate = useNavigate();
+
+  const { user } = useAuth();
 
   const [product, setProduct] = useState({
     name: "",
@@ -25,26 +33,33 @@ function VendorAddProduct() {
   };
 
   const handleSubmit = (event) => {
-  event.preventDefault();
+    event.preventDefault();
 
-  const newProduct = {
-    ...product,
-    id: Date.now(),
-    price: Number(product.price),
-    stock: Number(product.stock),
+    const vendorId = getVendorId(user);
+
+    if (!vendorId) {
+      alert("You must be logged in as a vendor.");
+      return;
+    }
+
+    const newProduct = {
+      ...product,
+      id: Date.now(),
+      price: Number(product.price),
+      stock: Number(product.stock),
+      vendorId,
+    };
+
+    addVendorProduct(newProduct);
+
+    alert("Product added successfully!");
+
+    navigate("/vendor/dashboard");
   };
-
-  addVendorProduct(newProduct);
-
-  alert("Product added successfully!");
-
-  navigate("/vendor/dashboard");
-};
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-8">
       <div className="mx-auto max-w-4xl">
-
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
@@ -61,7 +76,6 @@ function VendorAddProduct() {
           onSubmit={handleSubmit}
           className="rounded-xl bg-white p-6 shadow-sm"
         >
-
           {/* Product Name */}
           <div className="mb-5">
             <label className="mb-2 block font-semibold text-gray-800">
@@ -165,7 +179,7 @@ function VendorAddProduct() {
               placeholder="Describe your product"
               rows="5"
               required
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-green-600"
+              className="w-full resize-none rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-green-600"
             />
           </div>
 
@@ -223,7 +237,6 @@ function VendorAddProduct() {
 
           {/* Buttons */}
           <div className="flex flex-col gap-4 sm:flex-row">
-
             <button
               type="submit"
               className="flex-1 rounded-lg bg-green-600 px-6 py-3 font-semibold text-white transition hover:bg-green-700"
@@ -233,14 +246,14 @@ function VendorAddProduct() {
 
             <button
               type="button"
-              onClick={() => navigate("/vendor/dashboard")}
+              onClick={() =>
+                navigate("/vendor/dashboard")
+              }
               className="flex-1 rounded-lg border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-800 transition hover:bg-gray-50"
             >
               Cancel
             </button>
-
           </div>
-
         </form>
       </div>
     </div>

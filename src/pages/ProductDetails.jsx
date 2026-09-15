@@ -11,7 +11,7 @@ import { useNavigate, useParams } from "react-router-dom"
 
 import products from "../data/products"
 
-import { getVendorProducts } from "../utility/productStorage"
+import { getVendorProducts } from "../utility/ProductStorage"
 
 import { useCart } from "../context/useCart.js"
 

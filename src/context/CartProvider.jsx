@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 import { CartContext } from "./CartContext";
+
 import { toastWithSound } from "../utility/toastWithSound";
 
 export function CartProvider({ children }) {
@@ -17,7 +19,8 @@ export function CartProvider({ children }) {
           item.id === product.id
             ? {
                 ...item,
-                quantity: Number(item.quantity || 0) + 1,
+                quantity:
+                  Number(item.quantity || 0) + 1,
               }
             : item
         );
@@ -32,11 +35,14 @@ export function CartProvider({ children }) {
       ];
     });
 
-    // Toast runs once, outside the state updater
     if (existingItem) {
-      toastWithSound.success(`${product.name} quantity increased`);
+      toastWithSound.success(
+        `${product.name} quantity increased`
+      );
     } else {
-      toastWithSound.success(`${product.name} added to cart`);
+      toastWithSound.success(
+        `${product.name} added to cart`
+      );
     }
   };
 
@@ -47,7 +53,8 @@ export function CartProvider({ children }) {
         item.id === productId
           ? {
               ...item,
-              quantity: Number(item.quantity || 0) + 1,
+              quantity:
+                Number(item.quantity || 0) + 1,
             }
           : item
       )
@@ -63,7 +70,10 @@ export function CartProvider({ children }) {
         item.id === productId
           ? {
               ...item,
-              quantity: Math.max(1, Number(item.quantity || 1) - 1),
+              quantity: Math.max(
+                1,
+                Number(item.quantity || 1) - 1
+              ),
             }
           : item
       )
@@ -75,7 +85,9 @@ export function CartProvider({ children }) {
   // Remove a product from the cart
   const removeFromCart = (productId) => {
     setCartItems((currentItems) =>
-      currentItems.filter((item) => item.id !== productId)
+      currentItems.filter(
+        (item) => item.id !== productId
+      )
     );
 
     toastWithSound.success("Item removed");
